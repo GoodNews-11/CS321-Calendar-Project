@@ -3,76 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>SICS Calendar</title>
-
-<style>
-body { font-family: Arial; margin:0; background:#f4f6f8; }
-.dark { background:#1e1e1e; color:white; }
-
-header {
-  background:#4a90e2; color:white;
-  padding:15px; display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.container {
-  display:grid;
-  grid-template-columns:3fr 1fr;
-  height:calc(100vh - 70px);
-}
-
-.calendar { padding:20px; }
-
-.days {
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:6px;
-}
-
-.day {
-  background:white;
-  padding:12px;
-  min-height:80px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.dark .day { background:#2c2c2c; }
-
-.sidebar {
-  background:white;
-  padding:20px;
-  border-left:1px solid #ddd;
-}
-
-.dark .sidebar { background:#2a2a2a; }
-
-.task {
-  padding:8px;
-  margin:6px 0;
-  border-radius:5px;
-  color:white;
-  display:flex;
-  justify-content:space-between;
-}
-
-.completed { text-decoration:line-through; opacity:0.6; }
-
-.nav { margin-bottom:10px; }
-
-button { cursor:pointer; margin:3px; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
-  <h1>SICS Calendar</h1>
+  <h1>Calendar</h1>
 
   <div>
-    <button>Month</button>
-    <button>Week</button>
-    <button>🌙</button>
+    <button>Sign Up</button>
+    <button>Sign In</button>
+    <button onclick="toogleDark()">🌙</button>
   </div>
 </header>
 
@@ -92,7 +34,15 @@ button { cursor:pointer; margin:3px; }
     </div>
 
     <h2 id="title"></h2>
-    <div class="days" id="days"></div>
+    <div class="days">
+        <div>Sunday</div>
+        <div>Monday</div>
+        <div>Tuesday</div>
+        <div>Wednesday</div>
+        <div>Thursday</div>
+        <div>Friday</div>
+        <div>Saturday</div>
+    </div>
 
   </div>
 
@@ -100,9 +50,8 @@ button { cursor:pointer; margin:3px; }
   <div class="sidebar">
 
     <h3 id="selectedDateTitle">Select a day</h3>
-
-    <input id="taskInput" placeholder="New task">
     <input type="color" id="colorPicker" value="#4a90e2">
+    <input id="taskInput" placeholder="New task">
     <button>Add</button>
 
     <div id="taskList"></div>
@@ -110,5 +59,6 @@ button { cursor:pointer; margin:3px; }
   </div>
 
 </div>
+<script src="index.js"></script>
 </body>
 </html>
