@@ -1,64 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>SICS Calendar</title>
-<link rel="stylesheet" href="style.css">
-</head>
+    <head>
+        <title>Calendar</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <h3>Calendar</h3>
+            <div id="choice-banner">
+                <span>Reminder</span>
+                <span>Weather</span>
+                <span>Task</span>
+                <span>Theme</span>
+            </div>
+            <div>
+                <button class="signin-up-btn"><a href="login.html">Sign In</a></button>
+                <button class="signin-up-btn"><a href="register.html">Register</a></button>
+            </div>
+        </header>
+        <div class="container">
+            <div class="calendar">
+                <MonthYear id="MMYY-selection">
+                    <div>
+                        <button>&larr;</button>
+                        <span>Month</span>
+                        <button>&rarr;</button>
+                    </div>
 
-<body>
+                    <div>
+                        <button>&larr;</button>
+                        <span>Year</span>
+                        <button>&rarr;</button>
+                    </div>
+                </MonthYear>
 
-<header>
-  <h1>Calendar</h1>
+                <div class="days" id="dayNames">
+                    <div>Sunday</div>
+                    <div>Monday</div>
+                    <div>Tuesday</div>
+                    <div>Wednesday</div>
+                    <div>Thursday</div>
+                    <div>Friday</div>
+                    <div>Saturday</div>
+                </div>
+            </div>
 
-  <div>
-    <button>Sign Up</button>
-    <button>Sign In</button>
-    <button onclick="toogleDark()">🌙</button>
-  </div>
-</header>
-
-<div class="container">
-
-  <!-- Calendar -->
-  <div class="calendar">
-
-    <!-- Navigation -->
-    <div class="nav">
-      <button>◀</button>
-
-      <select id="monthSelect"></select>
-      <select id="yearSelect"></select>
-
-      <button>▶</button>
-    </div>
-
-    <h2 id="title"></h2>
-    <div class="days">
-        <div>Sunday</div>
-        <div>Monday</div>
-        <div>Tuesday</div>
-        <div>Wednesday</div>
-        <div>Thursday</div>
-        <div>Friday</div>
-        <div>Saturday</div>
-    </div>
-
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-
-    <h3 id="selectedDateTitle">Select a day</h3>
-    <input type="color" id="colorPicker" value="#4a90e2">
-    <input id="taskInput" placeholder="New task">
-    <button>Add</button>
-
-    <div id="taskList"></div>
-
-  </div>
-
-</div>
-<script src="index.js"></script>
-</body>
+            <div class="sidebar">
+                <h3 id="selectedDateTitle">Select a day</h3>
+                <input id="taskInput" placeholder="New task">
+                <input type="color" id="colorPicker" value="#4a90e2">
+                <button onclick="addTask()">Add</button>
+                <div id="taskList"></div>
+            </div>
+        </div>
+    </body>
 </html>

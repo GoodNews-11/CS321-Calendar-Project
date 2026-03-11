@@ -1,0 +1,51 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:0px;
+    height: 70vh;
+    background: url('background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: fixed;
+}
+
+.register-box{
+    background-color: white;
+    text-align: center;
+    border: 1px solid black;
+    padding-top: 20px;
+    padding-bottom: 60px;
+    padding-left: 100px;
+    padding-right: 100px;
+    border-radius: 15px;
+    font-size: 24px;
+}
+
+a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+    font-size: 12px;
+    color: rgb(156, 155, 155);
+}
+
+.register-input{
+    margin-bottom: 10px;
+}
+
+.mytext{
+    width: 250px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid rgb(194, 194, 194);
+}
+
+button{
+    cursor: pointer;
+    font-size: 16px;
+    width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: rgb(223, 70, 215);
+    border: none;
+}
