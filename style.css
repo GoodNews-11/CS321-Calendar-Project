@@ -4,13 +4,18 @@ body{
   font-size: 20px;
 }
 
-header{
-  background:white;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding-left: 10px;
+header {
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
   border-bottom: 1px solid rgb(173, 173, 173);
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 a:link, a:visited, a:hover, a:active {
@@ -18,19 +23,20 @@ a:link, a:visited, a:hover, a:active {
   color: black;
 }
 
-#choice-banner{
-  font-size: 20px;
+#choice-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-left: auto;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
-#choice-banner span{
-  margin: 0 6px;
-}
-
-#choice-banner span:not(:last-child){
+#choice-banner span:not(:last-child) {
   border-right: 1px solid grey;
   padding-right: 8px;
+}
+#choice-banner span{
+  margin: 0 6px;
 }
 
 .signin-up-btn{
@@ -69,6 +75,14 @@ a:link, a:visited, a:hover, a:active {
   text-align: center;
 }
 
+.day {
+  background:white;
+  padding:12px;
+  min-height:80px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
 .calendar{
   padding:20px;
 }
@@ -82,5 +96,3 @@ a:link, a:visited, a:hover, a:active {
   padding-left: 10px;
   border-left:1px solid #ddd;
 }
-
-
