@@ -4,7 +4,7 @@ body{
     align-items: center;
     margin-top:0px;
     height: 70vh;
-    background: url('background.png');
+    background-image: url('background.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: fixed;
@@ -26,6 +26,7 @@ a:link, a:visited, a:hover, a:active {
     text-decoration: none;
     font-size: 12px;
     color: rgb(156, 155, 155);
+    margin-bottom: 10px;
 }
 
 .register-input{
@@ -41,6 +42,7 @@ a:link, a:visited, a:hover, a:active {
 }
 
 button{
+    margin-top: 10px;
     cursor: pointer;
     font-size: 16px;
     width: 100px;
