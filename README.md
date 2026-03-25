@@ -11,3 +11,6 @@ national holidays.
 <img width="1410" height="1410" alt="image" src="https://github.com/user-attachments/assets/c8080d7f-1266-4a7e-a458-1949230eea82" />
 
 ---
+# ERD class diagram
+<img width="1410" height="2122" alt="image" src="https://github.com/user-attachments/assets/4198e1b2-d9c1-4b8e-b45d-3b88afa0ba42" />
+
