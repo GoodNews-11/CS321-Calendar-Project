@@ -31,6 +31,7 @@ app.use('/api/reminders', reminderRoutes);
 app.use('/api/weather',   weatherRoutes);
 app.use('/api/users',     userRoutes);
 
+
 app.get('/', (req, res) => res.json({ message: 'SICS API running' }));
 
 app.use(errorMiddleware);
