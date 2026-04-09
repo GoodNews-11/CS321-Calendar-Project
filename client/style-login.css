@@ -15,7 +15,7 @@ body{
     text-align: center;
     border: 1px solid black;
     padding-top: 20px;
-    padding-bottom: 60px;
+    padding-bottom: 35px;
     padding-left: 100px;
     padding-right: 100px;
     border-radius: 15px;
@@ -38,4 +38,29 @@ a:link, a:visited, a:hover, a:active {
     font-size: 16px;
     border-radius: 10px;
     border: 1px solid rgb(194, 194, 194);
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+.show-password-row{
+    text-align: left;
+    font-size: 13px;
+    margin: 8px 0 16px 0;
+}
+
+.create-link{
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.auth-submit-btn{
+    margin-top: 18px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: rgb(223, 70, 215);
+    border: none;
+    color: white;
 }

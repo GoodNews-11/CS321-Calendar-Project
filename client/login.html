@@ -1,22 +1,66 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Calendar</title>
+        <meta charset="UTF-8">
+        <title>Calendar - Login</title>
         <link rel="stylesheet" href="style-login.css">
     </head>
     <body>
         <div class="login-box">
             <h3>Welcome</h3>
-            <div class="login-input">
-                <input type="text" class="mytext" placeholder="Username">
-            </div>
-            <div class="login-input">
-                <input type="text" class="mytext" placeholder="Password">
-            </div>
-            <div>
-                <a href="register.html" class="login-box-account">Forgot Password?</a>
-            </div>
-            <a href="register.html" class="login-box-account">Create an account?</a>
+
+            <form id="loginForm">
+                <div class="login-input">
+                    <input type="text" id="loginUsername" class="mytext" placeholder="Username" required>
+                </div>
+
+                <div class="login-input password-wrapper">
+                    <input type="password" id="loginPassword" class="mytext" placeholder="Password" required>
+                </div>
+
+                <div class="show-password-row">
+                    <label>
+                        <input type="checkbox" id="showLoginPassword">
+                        Show password
+                    </label>
+                </div>
+
+                <div>
+                    <a href="register.html" class="login-box-account">Forgot Password?</a>
+                </div>
+
+                <a href="register.html" class="login-box-account create-link">Create an account?</a>
+
+                <button type="submit" class="auth-submit-btn">Sign In</button>
+            </form>
         </div>
+
+        <script>
+            const loginPassword = document.getElementById("loginPassword");
+            const showLoginPassword = document.getElementById("showLoginPassword");
+            const loginForm = document.getElementById("loginForm");
+
+            showLoginPassword.addEventListener("change", function () {
+                loginPassword.type = this.checked ? "text" : "password";
+            });
+
+            loginForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const username = document.getElementById("loginUsername").value.trim();
+                const password = loginPassword.value;
+
+                const loginInfo = {
+                    username,
+                    password,
+                    maskedPassword: "*".repeat(password.length),
+                    submittedAt: new Date().toISOString()
+                };
+
+                localStorage.setItem("currentCustomer", JSON.stringify(loginInfo));
+
+                window.location.href = "index.html";
+            });
+        </script>
     </body>
 </html>

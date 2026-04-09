@@ -11,26 +11,21 @@
     <h3>Calendar</h3>
 
     <div id="choice-banner">
-        <span>Reminder</span>
-        <span>Weather</span>
-        <span>Task</span>
-        <span>Theme</span>
+        <span onclick="showReminders()">Reminder</span>
+        <span onclick="showWeather()">Weather</span>
+        <span onclick="showTasks()">Task</span>
+        <span onclick="toggleTheme()">Theme</span>
     </div>
 
-    <div class="auth-buttons">
-        <button class="signin-up-btn"><a href="login.html">Sign In</a></button>
-        <button class="signin-up-btn"><a href="register.html">Register</a></button>
-    </div>
+    <div class="auth-buttons" id="authArea"></div>
 </header>
 
 <div class="container">
 
     <div class="calendar">
 
-        <!-- TITLE FIX -->
         <h2 id="title"></h2>
 
-        <!-- FIX: replaced MonthYear with div -->
         <div id="MMYY-selection">
             <div>
                 <button onclick="prev()">&larr;</button>
@@ -59,13 +54,21 @@
     </div>
 
     <div class="sidebar">
-        <h3 id="selectedDateTitle">Select a day</h3>
+        <div id="taskPanel">
+            <h3 id="selectedDateTitle">Select a day</h3>
 
-        <input id="taskInput" placeholder="New task">
-        <input type="color" id="colorPicker" value="#4a90e2">
-        <button onclick="addTask()">Add</button>
+            <input id="taskInput" placeholder="New task">
+            <input type="color" id="colorPicker" value="#4a90e2">
+            <button onclick="addTask()">Add</button>
 
-        <div id="taskList"></div>
+            <div id="taskList"></div>
+        </div>
+
+        <div id="weatherPanel" style="display:none;">
+            <h3>7-Day Weather Forecast</h3>
+            <div id="weatherStatus">Click Weather to load forecast.</div>
+            <div id="weatherList"></div>
+        </div>
     </div>
 
 </div>
