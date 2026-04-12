@@ -121,23 +121,31 @@ function selectDate(dateStr){
   renderTasks();
 }
 
-function addTask(){
-
-  if(!selectedDate){
+function addTask() {
+  if (!selectedDate) {
     alert("Select a day first");
     return;
   }
 
-  const text = document.getElementById("taskInput").value;
+  const text = document.getElementById("taskInput").value.trim();
   const color = document.getElementById("colorPicker").value;
+  const reminderTime = document.getElementById("reminderTime").value;
 
-  if(!text) return;
+  if (!text) return;
 
-  if(!tasks[selectedDate]) tasks[selectedDate] = [];
+  if (!tasks[selectedDate]) tasks[selectedDate] = [];
 
-  tasks[selectedDate].push({ text, color, done:false });
+  tasks[selectedDate].push({
+    text,
+    color,
+    done: false,
+    reminderTime: reminderTime,
+    reminded: false
+  });
 
   document.getElementById("taskInput").value = "";
+  document.getElementById("reminderTime").value = "";
+
   renderTasks();
   renderCalendar();
 }
@@ -162,10 +170,58 @@ function renderTasks(){
         <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${i})">
         <span class="${t.done ? 'completed-text' : ''}">${t.text}</span>
       </label>
-      <button onclick="deleteTask(${i})">🗑️</button>
-    `;
+    ${t.reminderTime ? `<div style="font-size:12px; margin-top:4px;">Reminder: ${t.reminderTime}</div>` : ""}
+    <button onclick="deleteTask(${i})">🗑️</button>
+`;
 
     list.appendChild(div);
+  });
+}
+
+function requestNotificationPermission() {
+  if ("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+function checkReminders() {
+  const now = new Date();
+
+  const currentDateStr =
+    now.getFullYear() + "-" +
+    String(now.getMonth() + 1).padStart(2, "0") + "-" +
+    String(now.getDate()).padStart(2, "0");
+
+  if (!tasks[currentDateStr]) return;
+
+  tasks[currentDateStr].forEach(task => {
+    if (!task.done && !task.reminded && task.reminderTime) {
+
+      const [h, m] = task.reminderTime.split(":").map(Number);
+
+      const reminderDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        h,
+        m
+      );
+
+      // ✅ trigger if current time is AFTER reminder time
+      if (now >= reminderDate) {
+        task.reminded = true;
+
+        console.log("REMINDER TRIGGERED:", task.text);
+
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("Task Reminder", {
+            body: task.text
+          });
+        } else {
+          alert("Reminder: " + task.text);
+        }
+      }
+    }
   });
 }
 
@@ -348,3 +404,5 @@ loadTheme();
 renderAuthUI();
 renderCalendar();
 showTasks();
+requestNotificationPermission();
+setInterval(checkReminders, 5000);

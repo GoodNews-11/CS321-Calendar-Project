@@ -1,25 +1,79 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Calendar</title>
-        <link rel="stylesheet" href="style-register.css">
-    </head>
-    <body>
-        <div class="register-box">
-            <h3>Welcome</h3>
-            <div class="register-input">
-                <input type="text" class="mytext" placeholder="Username">
-            </div>
-            <div class="register-input">
-                <input type="text" class="mytext" placeholder="Password">
-            </div>
-            <div class="register-input">
-                <input type="text" class="mytext" placeholder="Re-enter Password">
-            </div>
-            <div>
-                <a href="login.html">Have an account with us?</a>
-            </div>
-            <button>Submit</button>
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar - Register</title>
+    <link rel="stylesheet" href="style-register.css">
+</head>
+<body>
+
+<div class="login-box">
+    <h3>Create Account</h3>
+
+    <form id="registerForm">
+
+        <div class="login-input">
+            <input type="text" id="regUsername" class="mytext" placeholder="Username" required>
         </div>
-    </body>
+
+        <div class="login-input">
+            <input type="password" id="regPassword" class="mytext" placeholder="Password" required>
+        </div>
+
+        <div class="login-input">
+            <input type="password" id="regConfirm" class="mytext" placeholder="Re-enter Password" required>
+        </div>
+
+        <div class="show-password-row">
+            <label>
+                <input type="checkbox" id="showRegisterPassword">
+                Show password
+            </label>
+        </div>
+
+        <a href="login.html" class="login-box-account create-link">
+            Already have an account?
+        </a>
+
+        <button type="submit" class="auth-submit-btn">Register</button>
+    </form>
+</div>
+
+<script>
+const regPassword = document.getElementById("regPassword");
+const regConfirm = document.getElementById("regConfirm");
+const showRegisterPassword = document.getElementById("showRegisterPassword");
+
+showRegisterPassword.addEventListener("change", function () {
+    const type = this.checked ? "text" : "password";
+    regPassword.type = type;
+    regConfirm.type = type;
+});
+
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const username = document.getElementById("regUsername").value.trim();
+    const password = regPassword.value;
+    const confirm = regConfirm.value;
+
+    if (password !== confirm) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    const user = {
+        username,
+        password,
+        maskedPassword: "*".repeat(password.length),
+        createdAt: new Date().toISOString()
+    };
+
+    localStorage.setItem("currentCustomer", JSON.stringify(user));
+
+    window.location.href = "index.html";
+});
+</script>
+
+</body>
 </html>

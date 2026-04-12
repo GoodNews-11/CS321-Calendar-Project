@@ -2,34 +2,23 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top:0px;
     height: 70vh;
     background-image: url('background.png');
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: fixed;
 }
 
-.register-box{
+/* SAME BOX STYLE AS LOGIN */
+.login-box{
     background-color: white;
     text-align: center;
     border: 1px solid black;
-    padding-top: 20px;
-    padding-bottom: 60px;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding: 20px 100px 35px;
     border-radius: 15px;
     font-size: 24px;
 }
 
-a:link, a:visited, a:hover, a:active {
-    text-decoration: none;
-    font-size: 12px;
-    color: rgb(156, 155, 155);
-    margin-bottom: 10px;
-}
-
-.register-input{
+.login-input{
     margin-bottom: 10px;
 }
 
@@ -39,15 +28,32 @@ a:link, a:visited, a:hover, a:active {
     font-size: 16px;
     border-radius: 10px;
     border: 1px solid rgb(194, 194, 194);
+    padding: 0 12px;
+    box-sizing: border-box;
 }
 
-button{
-    margin-top: 10px;
+.show-password-row{
+    text-align: left;
+    font-size: 13px;
+    margin: 8px 0 16px 0;
+}
+
+.auth-submit-btn{
+    margin-top: 18px;
     cursor: pointer;
     font-size: 16px;
-    width: 100px;
+    width: 120px;
     height: 40px;
     border-radius: 20px;
     background-color: rgb(223, 70, 215);
     border: none;
+    color: white;
+}
+
+a{
+    display: block;
+    font-size: 12px;
+    color: rgb(156, 155, 155);
+    text-decoration: none;
+    margin-top: 8px;
 }
