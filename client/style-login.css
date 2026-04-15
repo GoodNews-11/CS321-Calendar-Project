@@ -4,10 +4,6 @@ body{
     align-items: center;
     margin-top:0px;
     height: 70vh;
-    background-image: url('background.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: fixed;
 }
 
 .login-box{

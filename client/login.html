@@ -11,7 +11,7 @@
 
             <form id="loginForm">
                 <div class="login-input">
-                    <input type="text" id="loginUsername" class="mytext" placeholder="Username" required>
+                    <input type="email" id="loginEmail" class="mytext" placeholder="Email" required>
                 </div>
 
                 <div class="login-input password-wrapper">
@@ -36,31 +36,53 @@
         </div>
 
         <script>
-            const loginPassword = document.getElementById("loginPassword");
-            const showLoginPassword = document.getElementById("showLoginPassword");
-            const loginForm = document.getElementById("loginForm");
+const loginPassword = document.getElementById("loginPassword");
+const showLoginPassword = document.getElementById("showLoginPassword");
+const loginForm = document.getElementById("loginForm");
 
-            showLoginPassword.addEventListener("change", function () {
-                loginPassword.type = this.checked ? "text" : "password";
-            });
+showLoginPassword.addEventListener("change", function () {
+    loginPassword.type = this.checked ? "text" : "password";
+});
 
-            loginForm.addEventListener("submit", function (event) {
-                event.preventDefault();
+loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-                const username = document.getElementById("loginUsername").value.trim();
-                const password = loginPassword.value;
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = loginPassword.value;
 
-                const loginInfo = {
-                    username,
-                    password,
-                    maskedPassword: "*".repeat(password.length),
-                    submittedAt: new Date().toISOString()
-                };
+    try {
+        const response = await fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email,
+                password
+            })
+        });
 
-                localStorage.setItem("currentCustomer", JSON.stringify(loginInfo));
+        const data = await response.json();
+        console.log("LOGIN RESPONSE:", data);
 
-                window.location.href = "index.html";
-            });
-        </script>
+        if (!response.ok) {
+            alert(data.message || "Login failed");
+            return;
+        }
+
+        localStorage.setItem("token", data.token);
+
+        if (data.user) {
+            localStorage.setItem("currentCustomer", JSON.stringify(data.user));
+        }
+
+        alert("Login successful");
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error("LOGIN ERROR:", error);
+        alert("Could not connect to backend");
+    }
+});
+</script>
     </body>
 </html>

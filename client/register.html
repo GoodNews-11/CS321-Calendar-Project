@@ -13,7 +13,11 @@
     <form id="registerForm">
 
         <div class="login-input">
-            <input type="text" id="regUsername" class="mytext" placeholder="Username" required>
+            <input type="text" id="regName" class="mytext" placeholder="Full Name" required>
+        </div>
+
+        <div class="login-input">
+            <input type="email" id="regEmail" class="mytext" placeholder="Email" required>
         </div>
 
         <div class="login-input">
@@ -50,10 +54,11 @@ showRegisterPassword.addEventListener("change", function () {
     regConfirm.type = type;
 });
 
-document.getElementById("registerForm").addEventListener("submit", function(e) {
+document.getElementById("registerForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const username = document.getElementById("regUsername").value.trim();
+    const name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
     const password = regPassword.value;
     const confirm = regConfirm.value;
 
@@ -62,16 +67,39 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
         return;
     }
 
-    const user = {
-        username,
-        password,
-        maskedPassword: "*".repeat(password.length),
-        createdAt: new Date().toISOString()
-    };
+    try {
+        const response = await fetch("http://localhost:5000/api/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                password
+            })
+        });
 
-    localStorage.setItem("currentCustomer", JSON.stringify(user));
+        const data = await response.json();
+        console.log("REGISTER RESPONSE:", data);
 
-    window.location.href = "index.html";
+        if (!response.ok) {
+            alert(data.message || "Register failed");
+            return;
+        }
+
+        localStorage.setItem("token", data.token);
+
+        if (data.user) {
+            localStorage.setItem("currentCustomer", JSON.stringify(data.user));
+        }
+
+        alert("Register successful");
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error("REGISTER ERROR:", error);
+        alert("Could not connect to backend");
+    }
 });
 </script>
 

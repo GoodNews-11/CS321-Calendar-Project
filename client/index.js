@@ -257,89 +257,68 @@ function showWeather() {
 async function loadWeather() {
   const weatherStatus = document.getElementById("weatherStatus");
   const weatherList = document.getElementById("weatherList");
+  const token = localStorage.getItem("token");
 
   weatherStatus.textContent = "Loading weather...";
   weatherList.innerHTML = "";
 
-  if (!navigator.geolocation) {
-    weatherStatus.textContent = "Geolocation is not supported in this browser.";
+  if (!token) {
+    weatherStatus.textContent = "Please log in first.";
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-
-      try {
-        const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=7`
-        );
-
-        const data = await response.json();
-        renderWeather(data.daily);
-        weatherStatus.textContent = "Forecast for the next 7 days:";
-      } catch (error) {
-        weatherStatus.textContent = "Could not load weather data.";
+  try {
+    const response = await fetch("http://localhost:5000/api/weather/forecast?city=Fairfax", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       }
-    },
-    () => {
-      weatherStatus.textContent = "Location permission denied.";
+    });
+
+    const data = await response.json();
+    console.log("WEATHER RESPONSE:", data);
+
+    if (!response.ok) {
+      weatherStatus.textContent = data.message || "Could not load weather.";
+      return;
     }
-  );
-}
 
-function renderWeather(daily) {
-  const weatherList = document.getElementById("weatherList");
-  weatherList.innerHTML = "";
-
-  for (let i = 0; i < daily.time.length; i++) {
-    const dayCard = document.createElement("div");
-    dayCard.className = "weather-card";
-
-    const code = daily.weather_code[i];
-    const description = getWeatherDescription(code);
-
-    dayCard.innerHTML = `
-      <div class="weather-day">${daily.time[i]}</div>
-      <div>${description}</div>
-      <div class="weather-desc">
-        High: ${daily.temperature_2m_max[i]}°C<br>
-        Low: ${daily.temperature_2m_min[i]}°C
-      </div>
-    `;
-
-    weatherList.appendChild(dayCard);
+    weatherStatus.textContent = "Forecast for saved location";
+    renderWeather(data.forecast);
+  } catch (error) {
+    console.error("WEATHER ERROR:", error);
+    weatherStatus.textContent = "Could not connect to backend.";
   }
 }
 
-function getWeatherDescription(code) {
-  const weatherMap = {
-    0: "Sunny / Clear",
-    1: "Mainly clear",
-    2: "Partly cloudy",
-    3: "Cloudy",
-    45: "Fog",
-    48: "Rime fog",
-    51: "Light drizzle",
-    53: "Drizzle",
-    55: "Heavy drizzle",
-    61: "Light rain",
-    63: "Rain",
-    65: "Heavy rain",
-    71: "Light snow",
-    73: "Snow",
-    75: "Heavy snow",
-    80: "Rain showers",
-    81: "Heavy rain showers",
-    82: "Violent rain showers",
-    85: "Snow showers",
-    86: "Heavy snow showers",
-    95: "Thunderstorm"
-  };
+function renderWeather(forecast) {
+  const weatherList = document.getElementById("weatherList");
+  weatherList.innerHTML = "";
 
-  return weatherMap[code] || "Unknown";
+  forecast.forEach(day => {
+    const date =
+      day.date ||
+      day.dt_txt?.split(" ")[0] ||
+      "Unknown date";
+
+    const description =
+      day.description ||
+      day.weather?.[0]?.description ||
+      "Unknown";
+
+    const dayCard = document.createElement("div");
+    dayCard.className = "weather-card";
+
+    dayCard.innerHTML = `
+      <div class="weather-day">${date}</div>
+      <div>${description}</div>
+    `;
+
+    weatherList.appendChild(dayCard);
+  });
 }
+
 
 /* ---------- Theme ---------- */
 
@@ -361,16 +340,14 @@ function renderAuthUI() {
   const authArea = document.getElementById("authArea");
   const user = JSON.parse(localStorage.getItem("currentCustomer"));
 
-  if (user && user.username) {
-    // Logged in view
+  if (user) {
     authArea.innerHTML = `
       <div class="customer-info">
-        <strong>${user.username}</strong><br>
+        <strong>${user.name || user.email || "User"}</strong><br>
         <button onclick="logout()">Logout</button>
       </div>
     `;
   } else {
-    // Not logged in view
     authArea.innerHTML = `
       <button class="signin-up-btn"><a href="login.html">Sign In</a></button>
       <button class="signin-up-btn"><a href="register.html">Register</a></button>
@@ -380,6 +357,7 @@ function renderAuthUI() {
 
 function logout() {
   localStorage.removeItem("currentCustomer");
+  localStorage.removeItem("token");
   location.reload();
 }
 

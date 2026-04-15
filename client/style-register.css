@@ -3,9 +3,6 @@ body{
     justify-content: center;
     align-items: center;
     height: 70vh;
-    background-image: url('background.png');
-    background-size: cover;
-    background-repeat: no-repeat;
 }
 
 /* SAME BOX STYLE AS LOGIN */
