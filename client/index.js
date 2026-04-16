@@ -23,8 +23,8 @@ monthNames.forEach((m,i)=>{
   monthSelect.appendChild(opt);
 });
 
-// Populate year dropdown (2000–2035)
-for(let y=2000; y<=2035; y++){
+
+for(let y=2000; y<=2050; y++){
   const opt = document.createElement("option");
   opt.value = y;
   opt.textContent = y;
@@ -129,7 +129,6 @@ function addTask() {
 
   const text = document.getElementById("taskInput").value.trim();
   const color = document.getElementById("colorPicker").value;
-  const reminderTime = document.getElementById("reminderTime").value;
 
   if (!text) return;
 
@@ -139,12 +138,10 @@ function addTask() {
     text,
     color,
     done: false,
-    reminderTime: reminderTime,
     reminded: false
   });
 
   document.getElementById("taskInput").value = "";
-  document.getElementById("reminderTime").value = "";
 
   renderTasks();
   renderCalendar();
@@ -170,58 +167,10 @@ function renderTasks(){
         <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${i})">
         <span class="${t.done ? 'completed-text' : ''}">${t.text}</span>
       </label>
-    ${t.reminderTime ? `<div style="font-size:12px; margin-top:4px;">Reminder: ${t.reminderTime}</div>` : ""}
     <button onclick="deleteTask(${i})">🗑️</button>
 `;
 
     list.appendChild(div);
-  });
-}
-
-function requestNotificationPermission() {
-  if ("Notification" in window && Notification.permission === "default") {
-    Notification.requestPermission();
-  }
-}
-
-function checkReminders() {
-  const now = new Date();
-
-  const currentDateStr =
-    now.getFullYear() + "-" +
-    String(now.getMonth() + 1).padStart(2, "0") + "-" +
-    String(now.getDate()).padStart(2, "0");
-
-  if (!tasks[currentDateStr]) return;
-
-  tasks[currentDateStr].forEach(task => {
-    if (!task.done && !task.reminded && task.reminderTime) {
-
-      const [h, m] = task.reminderTime.split(":").map(Number);
-
-      const reminderDate = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        h,
-        m
-      );
-
-      // ✅ trigger if current time is AFTER reminder time
-      if (now >= reminderDate) {
-        task.reminded = true;
-
-        console.log("REMINDER TRIGGERED:", task.text);
-
-        if ("Notification" in window && Notification.permission === "granted") {
-          new Notification("Task Reminder", {
-            body: task.text
-          });
-        } else {
-          alert("Reminder: " + task.text);
-        }
-      }
-    }
   });
 }
 
@@ -241,10 +190,6 @@ function showTasks() {
   activePanel = "tasks";
   document.getElementById("taskPanel").style.display = "block";
   document.getElementById("weatherPanel").style.display = "none";
-}
-
-function showReminders() {
-  showTasks(); // for now, keep reminder using the task sidebar
 }
 
 function showWeather() {
@@ -382,5 +327,3 @@ loadTheme();
 renderAuthUI();
 renderCalendar();
 showTasks();
-requestNotificationPermission();
-setInterval(checkReminders, 5000);
