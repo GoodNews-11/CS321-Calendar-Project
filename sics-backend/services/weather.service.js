@@ -1,4 +1,4 @@
-const axios        = require('axios');
+const axios = require('axios');
 const WeatherCache = require('../models/WeatherCache');
 const { OPENWEATHER_API_KEY } = require('../config/env');
 
@@ -10,8 +10,8 @@ const roundCoord = (val) => Math.round(val * 100) / 100;
 const getCurrentWeather = async (lat, lon) => {
   const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
     params: {
-      lat:   lat,
-      lon:   lon,
+      lat: lat,
+      lon: lon,
       appid: OPENWEATHER_API_KEY,
       units: 'metric',
     },
@@ -23,8 +23,8 @@ const getCurrentWeather = async (lat, lon) => {
 const getForecastData = async (lat, lon) => {
   const response = await axios.get('https://api.openweathermap.org/data/2.5/forecast', {
     params: {
-      lat:   lat,
-      lon:   lon,
+      lat: lat,
+      lon: lon,
       appid: OPENWEATHER_API_KEY,
       units: 'metric',
     },
@@ -39,8 +39,8 @@ const getWeatherData = async (lat, lon) => {
 
   // Check cache
   const cached = await WeatherCache.findOne({
-    lat:       rLat,
-    lon:       rLon,
+    lat: rLat,
+    lon: rLon,
     expiresAt: { $gt: new Date() },
   });
 
@@ -67,9 +67,9 @@ const getWeatherData = async (lat, lon) => {
   await WeatherCache.findOneAndUpdate(
     { lat: rLat, lon: rLon },
     {
-      lat:       rLat,
-      lon:       rLon,
-      data:      combined,
+      lat: rLat,
+      lon: rLon,
+      data: combined,
       fetchedAt: new Date(),
       expiresAt,
     },
@@ -85,29 +85,29 @@ const parseWeather = (data) => {
 
   // ── Current weather ───────────────────────────────────────────
   const current = {
-    temp:        Math.round(c.main.temp),
-    feelsLike:   Math.round(c.main.feels_like),
-    tempMin:     Math.round(c.main.temp_min),
-    tempMax:     Math.round(c.main.temp_max),
-    humidity:    c.main.humidity,
-    windSpeed:   c.wind.speed,
+    temp: Math.round(c.main.temp),
+    feelsLike: Math.round(c.main.feels_like),
+    tempMin: Math.round(c.main.temp_min),
+    tempMax: Math.round(c.main.temp_max),
+    humidity: c.main.humidity,
+    windSpeed: c.wind.speed,
     description: c.weather[0].description,
-    icon:        c.weather[0].icon,
-    main:        c.weather[0].main,   // Rain, Snow, Clear, Clouds etc.
-    cityName:    c.name,
-    country:     c.sys.country,
+    icon: c.weather[0].icon,
+    main: c.weather[0].main,   // Rain, Snow, Clear, Clouds etc.
+    cityName: c.name,
+    country: c.sys.country,
   };
 
   // ── Hourly — next 24 hours (8 entries × 3h = 24h) ────────────
   const hourly = data.forecast.list.slice(0, 8).map((entry) => ({
-    time:        entry.dt_txt,
-    temp:        Math.round(entry.main.temp),
-    feelsLike:   Math.round(entry.main.feels_like),
-    humidity:    entry.main.humidity,
+    time: entry.dt_txt,
+    temp: Math.round(entry.main.temp),
+    feelsLike: Math.round(entry.main.feels_like),
+    humidity: entry.main.humidity,
     description: entry.weather[0].description,
-    icon:        entry.weather[0].icon,
-    main:        entry.weather[0].main,
-    windSpeed:   entry.wind.speed,
+    icon: entry.weather[0].icon,
+    main: entry.weather[0].main,
+    windSpeed: entry.wind.speed,
   }));
 
   // ── Daily — group 3-hour entries by date, pick midday entry ──
@@ -122,14 +122,14 @@ const parseWeather = (data) => {
       dailyMap[date] = {
         hour,
         date,
-        tempMin:     Math.round(entry.main.temp_min),
-        tempMax:     Math.round(entry.main.temp_max),
-        temp:        Math.round(entry.main.temp),
-        humidity:    entry.main.humidity,
+        tempMin: Math.round(entry.main.temp_min),
+        tempMax: Math.round(entry.main.temp_max),
+        temp: Math.round(entry.main.temp),
+        humidity: entry.main.humidity,
         description: entry.weather[0].description,
-        icon:        entry.weather[0].icon,
-        main:        entry.weather[0].main,
-        windSpeed:   entry.wind.speed,
+        icon: entry.weather[0].icon,
+        main: entry.weather[0].main,
+        windSpeed: entry.wind.speed,
       };
     }
   });
