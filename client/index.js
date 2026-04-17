@@ -8,15 +8,15 @@ let activePanel = "tasks";
 /* ---------- MONTH/YEAR SETUP ---------- */
 
 const monthNames = [
-  "January","February","March","April","May","June",
-  "July","August","September","October","November","December"
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
 ];
 
 const monthSelect = document.getElementById("monthSelect");
 const yearSelect = document.getElementById("yearSelect");
 
 // Populate month dropdown
-monthNames.forEach((m,i)=>{
+monthNames.forEach((m, i) => {
   const opt = document.createElement("option");
   opt.value = i;
   opt.textContent = m;
@@ -24,7 +24,7 @@ monthNames.forEach((m,i)=>{
 });
 
 // Populate year dropdown (2000–2035)
-for(let y=2000; y<=2035; y++){
+for (let y = 2000; y <= 2035; y++) {
   const opt = document.createElement("option");
   opt.value = y;
   opt.textContent = y;
@@ -32,39 +32,39 @@ for(let y=2000; y<=2035; y++){
 }
 
 /* ---------- NAVIGATION ---------- */
-function prevYear(){
+function prevYear() {
   currentDate.setFullYear(currentDate.getFullYear() - 1);
   renderCalendar();
 }
 
-function nextYear(){
+function nextYear() {
   currentDate.setFullYear(currentDate.getFullYear() + 1);
   renderCalendar();
 }
 
-function prev(){
-    currentDate.setMonth(currentDate.getMonth()-1);
-    renderCalendar();
-}
-
-function next(){
-    currentDate.setMonth(currentDate.getMonth()+1);
+function prev() {
+  currentDate.setMonth(currentDate.getMonth() - 1);
   renderCalendar();
 }
 
-function changeMonth(){
+function next() {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderCalendar();
+}
+
+function changeMonth() {
   currentDate.setMonth(parseInt(monthSelect.value));
   renderCalendar();
 }
 
-function changeYear(){
+function changeYear() {
   currentDate.setFullYear(parseInt(yearSelect.value));
   renderCalendar();
 }
 
 /* ---------- CALENDAR ---------- */
 
-function renderCalendar(){
+function renderCalendar() {
 
   const daysContainer = document.getElementById("days");
   daysContainer.innerHTML = "";
@@ -79,32 +79,32 @@ function renderCalendar(){
   const titleEl = document.getElementById("title");
   if (titleEl) {
     titleEl.textContent = `${monthNames[month]} ${year}`;
+  }
+  renderMonth(year, month);
 }
-    renderMonth(year,month);
-}
 
-function renderMonth(year,month){
+function renderMonth(year, month) {
 
-  const firstDay = new Date(year,month,1).getDay();
-  const totalDays = new Date(year,month+1,0).getDate();
+  const firstDay = new Date(year, month, 1).getDay();
+  const totalDays = new Date(year, month + 1, 0).getDate();
 
-  for(let i=0;i<firstDay;i++){
+  for (let i = 0; i < firstDay; i++) {
     document.getElementById("days").appendChild(document.createElement("div"));
   }
 
-  for(let d=1; d<=totalDays; d++){
-    const dateStr = formatDate(year,month,d);
-    createDayCell(d,dateStr);
+  for (let d = 1; d <= totalDays; d++) {
+    const dateStr = formatDate(year, month, d);
+    createDayCell(d, dateStr);
   }
 }
 
-function createDayCell(dayNum,dateStr){
+function createDayCell(dayNum, dateStr) {
 
   const cell = document.createElement("div");
   cell.className = "day";
   cell.innerHTML = `<strong>${dayNum}</strong>`;
 
-  if(tasks[dateStr] && tasks[dateStr].length > 0) {
+  if (tasks[dateStr] && tasks[dateStr].length > 0) {
     cell.innerHTML += `<br>${tasks[dateStr].length} task(s)`;
   }
 
@@ -115,7 +115,7 @@ function createDayCell(dayNum,dateStr){
 
 /* ---------- TASKS ---------- */
 
-function selectDate(dateStr){
+function selectDate(dateStr) {
   selectedDate = dateStr;
   document.getElementById("selectedDateTitle").textContent = "Tasks for " + dateStr;
   renderTasks();
@@ -150,20 +150,20 @@ function addTask() {
   renderCalendar();
 }
 
-function renderTasks(){
+function renderTasks() {
 
   const list = document.getElementById("taskList");
   list.innerHTML = "";
 
-  if(!tasks[selectedDate]) return;
+  if (!tasks[selectedDate]) return;
 
-  tasks[selectedDate].forEach((t,i)=>{
+  tasks[selectedDate].forEach((t, i) => {
 
     const div = document.createElement("div");
     div.className = "task";
     div.style.background = t.color;
 
-    if(t.done) div.classList.add("completed");
+    if (t.done) div.classList.add("completed");
 
     div.innerHTML = `
       <label>
@@ -225,14 +225,14 @@ function checkReminders() {
   });
 }
 
-function toggleTask(i){
+function toggleTask(i) {
   tasks[selectedDate][i].done = !tasks[selectedDate][i].done;
   renderTasks();
   renderCalendar();
 }
 
-function deleteTask(i){
-  tasks[selectedDate].splice(i,1);
+function deleteTask(i) {
+  tasks[selectedDate].splice(i, 1);
   renderTasks();
   renderCalendar();
 }
@@ -253,8 +253,29 @@ function showWeather() {
   document.getElementById("weatherPanel").style.display = "block";
   loadWeather();
 }
+// Auto-load the last searched city from localStorage if there is one.
+// This way the user doesn't have to re-type their city every time they switch panels.
+const lastCity = localStorage.getItem("lastCity");
+if (lastCity) {
+  document.getElementById("cityInput").value = lastCity;
+  loadWeather(lastCity);
+}
+/* ---------- Weather ---------- */
+// Reads the city name from the input, saves it to localStorage, and triggers loadWeather.
+function searchWeather() {
+  const cityInput = document.getElementById("cityInput");
+  const city = cityInput.value.trim();
 
-async function loadWeather() {
+  if (!city) {
+    document.getElementById("weatherStatus").textContent = "Please enter a city name.";
+    return;
+  }
+
+  localStorage.setItem("lastCity", city);
+  loadWeather(city);
+}
+// updated weather.controller.js geocodes it to lat/lon before fetching.
+async function loadWeather(city) {
   const weatherStatus = document.getElementById("weatherStatus");
   const weatherList = document.getElementById("weatherList");
   const token = localStorage.getItem("token");
@@ -268,7 +289,11 @@ async function loadWeather() {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/api/weather/forecast?city=Fairfax", {
+    const url = city
+      ? `http://localhost:5000/api/weather/forecast?city=${encodeURIComponent(city)}`
+      : `http://localhost:5000/api/weather/forecast`;
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -283,8 +308,9 @@ async function loadWeather() {
       weatherStatus.textContent = data.message || "Could not load weather.";
       return;
     }
-
-    weatherStatus.textContent = "Forecast for saved location";
+    const locLabel = data.location.city
+      || `${data.location.lat}, ${data.location.lon}`;
+    weatherStatus.textContent = `Forecast for ${locLabel}`;
     renderWeather(data.forecast);
   } catch (error) {
     console.error("WEATHER ERROR:", error);
@@ -296,6 +322,10 @@ function renderWeather(forecast) {
   const weatherList = document.getElementById("weatherList");
   weatherList.innerHTML = "";
 
+  if (!forecast || forecast.length === 0) {
+    weatherList.textContent = "No forecast data available.";
+    return;
+  }
   forecast.forEach(day => {
     const date =
       day.date ||
@@ -307,12 +337,16 @@ function renderWeather(forecast) {
       day.weather?.[0]?.description ||
       "Unknown";
 
+    const tempInfo = day.temp !== undefined
+      ? ` — ${day.temp}°C`
+      : "";
+
     const dayCard = document.createElement("div");
     dayCard.className = "weather-card";
 
     dayCard.innerHTML = `
-      <div class="weather-day">${date}</div>
-      <div>${description}</div>
+      <div class="weather-day">${date}${tempInfo}</div>
+      <div class="weather-description">${description}</div>
     `;
 
     weatherList.appendChild(dayCard);
@@ -364,8 +398,8 @@ function logout() {
 
 /* ---------- UTIL ---------- */
 
-function formatDate(y,m,d){
-  return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+function formatDate(y, m, d) {
+  return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
 
 function loadTheme() {

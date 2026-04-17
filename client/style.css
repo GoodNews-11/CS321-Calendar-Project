@@ -1,4 +1,4 @@
-body{
+body {
   padding: 0;
   margin: 0;
   font-size: 20px;
@@ -18,7 +18,10 @@ header {
   gap: 10px;
 }
 
-a:link, a:visited, a:hover, a:active {
+a:link,
+a:visited,
+a:hover,
+a:active {
   text-decoration: none;
   color: black;
 }
@@ -35,7 +38,8 @@ a:link, a:visited, a:hover, a:active {
   border-right: 1px solid grey;
   padding-right: 8px;
 }
-#choice-banner span{
+
+#choice-banner span {
   margin: 0 6px;
   cursor: pointer;
 }
@@ -44,7 +48,7 @@ a:link, a:visited, a:hover, a:active {
   text-decoration: underline;
 }
 
-.signin-up-btn{
+.signin-up-btn {
   border-radius: 6px;
   font-size: 16px;
   background-color: white;
@@ -52,54 +56,54 @@ a:link, a:visited, a:hover, a:active {
   margin-left: 0px;
 }
 
-#MMYY-selection{
-  display:flex;
-  justify-content:space-evenly;
-  align-items:center;
-  margin-bottom:15px;
-  border-bottom:1px solid #ddd;
-  padding-bottom:10px;
+#MMYY-selection {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
 }
 
-#MMYY-selection div{
+#MMYY-selection div {
   display: flex;
-  align-items:center;
+  align-items: center;
   gap: 8px;
 }
 
 .container {
-  display:grid;
-  grid-template-columns:3fr 1fr;
-  height:calc(100vh - 70px);
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  height: calc(100vh - 70px);
 }
 
 .days {
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:6px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
   text-align: center;
 }
 
 .day {
-  background:white;
-  padding:12px;
-  min-height:80px;
-  border-radius:6px;
-  cursor:pointer;
+  background: white;
+  padding: 12px;
+  min-height: 80px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.calendar{
-  padding:20px;
+.calendar {
+  padding: 20px;
 }
 
-#dayNames{
+#dayNames {
   margin-bottom: 15px;
 }
 
 .sidebar {
-  background:white;
+  background: white;
   padding-left: 10px;
-  border-left:1px solid #ddd;
+  border-left: 1px solid #ddd;
 }
 
 .completed-text {
@@ -129,6 +133,32 @@ a:link, a:visited, a:hover, a:active {
   font-size: 16px;
 }
 
+.weather-search {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.weather-search input {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.weather-search button {
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid #888;
+  background: white;
+  border-radius: 4px;
+}
+
+.weather-search button:hover {
+  background: #f0f0f0;
+}
 
 /* DARK MODE */
 
@@ -161,6 +191,13 @@ body.dark #weatherList {
 #weatherStatus {
   margin-bottom: 12px;
   font-size: 16px;
+}
+
+body.dark .weather-search input,
+body.dark .weather-search button {
+  background: #333;
+  color: white;
+  border-color: #555;
 }
 
 body.dark {
