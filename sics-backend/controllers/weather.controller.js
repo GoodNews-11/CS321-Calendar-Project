@@ -27,6 +27,27 @@ const geocodeCity = async (city) => {
     country: place.country,
   };
 };
+// Convert lat/lon back to a city name using OpenWeather's reverse geocoding API
+const reverseGeocode = async (lat, lon) => {
+  try {
+    const response = await axios.get('https://api.openweathermap.org/geo/1.0/reverse', {
+      params: {
+        lat,
+        lon,
+        limit: 1,
+        appid: OPENWEATHER_API_KEY,
+      },
+    });
+
+    if (!response.data || response.data.length === 0) return null;
+
+    const place = response.data[0];
+    return `${place.name}, ${place.country}`;
+  } catch (error) {
+    console.warn('Reverse geocode failed:', error.message);
+    return null; 
+  }
+};
 //Shared helper: resolve location from query params or user profile
 // Priority: city name → explicit lat/lon → user's saved location
 const resolveLocation = async (req) => {
@@ -38,6 +59,8 @@ const resolveLocation = async (req) => {
     lat = geo.lat;
     lon = geo.lon;
     resolvedCity = `${geo.city}, ${geo.country}`;
+  } else if (lat && lon){
+    resolvedCity = await reverseGeocode(lat, lon);
   }
 
   if (!lat || !lon) {

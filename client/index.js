@@ -191,7 +191,7 @@ function showTasks() {
   document.getElementById("taskPanel").style.display = "block";
   document.getElementById("weatherPanel").style.display = "none";
 }
-
+/* ---------- Weather ---------- */
 function showWeather() {
   activePanel = "weather";
   document.getElementById("taskPanel").style.display = "none";
@@ -205,7 +205,7 @@ if (lastCity) {
   document.getElementById("cityInput").value = lastCity;
   loadWeather(lastCity);
 }
-/* ---------- Weather ---------- */
+
 // Reads the city name from the input, saves it to localStorage, and triggers loadWeather.
 function searchWeather() {
   const cityInput = document.getElementById("cityInput");
@@ -234,9 +234,20 @@ async function loadWeather(city) {
   }
 
   try {
-    const url = city
-      ? `http://localhost:5000/api/weather/forecast?city=${encodeURIComponent(city)}`
-      : `http://localhost:5000/api/weather/forecast`;
+    let url;
+      if (city) {
+        // User typed a city in the search box
+        url = `http://localhost:5000/api/weather/forecast?city=${encodeURIComponent(city)}`;
+    } else {
+        // No city — try to use the browser's geolocation
+        const coords = await getBrowserCoords();
+        if (coords) {
+          url = `http://localhost:5000/api/weather/forecast?lat=${coords.lat}&lon=${coords.lon}`;
+      } else {
+          // Fall back to whatever location the user has saved on their profile
+          url = `http://localhost:5000/api/weather/forecast`;
+      }
+    }
 
     const response = await fetch(url, {
       method: "GET",
@@ -261,6 +272,27 @@ async function loadWeather(city) {
     console.error("WEATHER ERROR:", error);
     weatherStatus.textContent = "Could not connect to backend.";
   }
+}
+function getBrowserCoords() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      resolve(null);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        resolve({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        });
+      },
+      (error) => {
+        console.warn("Geolocation denied or unavailable:", error.message);
+        resolve(null);
+      },
+      { timeout: 5000 }
+    );
+  });
 }
 
 function renderWeather(forecast) {
