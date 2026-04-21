@@ -284,6 +284,7 @@ function renderTasks() {
       <label>
         <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${i})">
         <span class="${t.done ? "completed-text" : ""}">${t.text}</span>
+        <span class="task-time">${timeLabel}</span>
       </label>
       <button onclick="deleteTask(${i})">🗑️</button>
     `;
