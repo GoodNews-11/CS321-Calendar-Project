@@ -3,14 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Calendar</title>
+    <title>WeatherSync Calendar</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <header>
-        <h3>Calendar</h3>
+        <h3 id="app-title"><span class="app-icon">⛅</span> WeatherSync Calendar</h3>
 
         <div id="choice-banner">
             <span onclick="showWeather()">Weather</span>
@@ -59,7 +59,15 @@
                 <h3 id="selectedDateTitle">Select a day</h3>
 
                 <input id="taskInput" placeholder="New task">
-                <input type="time" id="reminderTime">
+                <label class="time-label">Start
+                    <input type="datetime-local" id="startTime">
+                </label>
+                <label class="time-label">End
+                    <input type="datetime-local" id="endTime">
+                </label>
+                <label class="allday-label">
+                    <input type="checkbox" id="allDayCheck" onchange="toggleAllDay()">All day
+                </label>
                 <input type="color" id="colorPicker" value="#4a90e2">
                 <button onclick="addTask()">Add</button>
 
