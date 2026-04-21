@@ -12,7 +12,26 @@ header {
   padding: 10px;
   border-bottom: 1px solid rgb(173, 173, 173);
 }
+header {
+  position: relative;
+}
 
+#app-title {
+  position: absolute;
+  left: 40%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.app-icon {
+  font-size: 1.2em;
+}
 .auth-buttons {
   display: flex;
   gap: 10px;
@@ -159,7 +178,29 @@ a:active {
 .weather-search button:hover {
   background: #f0f0f0;
 }
+.time-label,
+.allday-label {
+  display: block;
+  font-size: 14px;
+  margin: 6px 0;
+}
 
+.time-label input {
+  display: block;
+  margin-top: 2px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.allday-label input {
+  margin-right: 6px;
+}
+
+.task-time {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-left: 4px;
+}
 /* DARK MODE */
 
 body.dark #weatherPanel {
