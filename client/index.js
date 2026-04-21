@@ -492,7 +492,7 @@ function renderWeather(forecast) {
   forecast.forEach((day) => {
     const date = day.date || day.dt_txt?.split(" ")[0] || "Unknown date";
     const description = day.description || day.weather?.[0]?.description || "Unknown";
-    const tempInfo = day.temp !== undefined ? ` — ${day.temp}°C` : "";
+    const tempInfo = day.temp !== undefined ? ` — ${day.temp}°F` : "";
 
     const dayCard = document.createElement("div");
     dayCard.className = "weather-card";

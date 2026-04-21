@@ -13,7 +13,7 @@ const getCurrentWeather = async (lat, lon) => {
       lat: lat,
       lon: lon,
       appid: OPENWEATHER_API_KEY,
-      units: 'metric',
+      units: 'imperial',
     },
   });
   return response.data;
@@ -26,7 +26,7 @@ const getForecastData = async (lat, lon) => {
       lat: lat,
       lon: lon,
       appid: OPENWEATHER_API_KEY,
-      units: 'metric',
+      units: 'imperial',
     },
   });
   return response.data;

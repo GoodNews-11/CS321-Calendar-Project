@@ -16,10 +16,10 @@ const fetchAndCache = async (lat, lon, label) => {
 
   const [currentRes, forecastRes] = await Promise.all([
     axios.get('https://api.openweathermap.org/data/2.5/weather', {
-      params: { lat, lon, appid: OPENWEATHER_API_KEY, units: 'metric' },
+      params: { lat, lon, appid: OPENWEATHER_API_KEY, units: 'imperial' },
     }),
     axios.get('https://api.openweathermap.org/data/2.5/forecast', {
-      params: { lat, lon, appid: OPENWEATHER_API_KEY, units: 'metric' },
+      params: { lat, lon, appid: OPENWEATHER_API_KEY, units: 'imperial' },
     }),
   ]);
 
