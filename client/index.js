@@ -118,7 +118,7 @@ async function loadTasksForCurrentMonth() {
         _id: event._id,
         text: event.title,
         color: event.color || "#4a90e2",
-        done: !!event.completed,
+        done: !!event.isCompleted,
         startTime: event.startTime,
         endTime: event.endTime
       });
@@ -191,6 +191,10 @@ function createDayCell(dayNum, dateStr) {
 function selectDate(dateStr) {
   selectedDate = dateStr;
   document.getElementById("selectedDateTitle").textContent = "Tasks for " + dateStr;
+  document.getElementById("startTime").value = `${dateStr}T09:00`;
+  document.getElementById("endTime").value   = `${dateStr}T10:00`;
+  document.getElementById("allDayCheck").checked = false;
+  toggleAllDay();
   renderTasks();
 }
 
@@ -208,11 +212,29 @@ async function addTask() {
 
   const text = document.getElementById("taskInput").value.trim();
   const color = document.getElementById("colorPicker").value;
+  const allDay = document.getElementById("allDayCheck").checked;
 
   if (!text) return;
 
-  const startTime = `${selectedDate}T00:00:00`;
-  const endTime = `${selectedDate}T23:59:59`;
+  let startTime, endTime;
+  if (allDay) {
+    startTime = `${selectedDate}T00:00:00`;
+    endTime   = `${selectedDate}T23:59:59`;
+  } else {
+      const startVal = document.getElementById("startTime").value;
+      const endVal   = document.getElementById("endTime").value;
+      if (!startVal || !endVal) {
+        alert("Please set both a start and end time");
+        return;
+      }
+      startTime = startVal;
+      endTime   = endVal;
+  }
+
+  if (new Date(endTime) <= new Date(startTime)) {
+    alert("End time must be after start time");
+    return;
+  }
 
   try {
     const response = await fetch("http://localhost:5000/api/events", {
@@ -257,7 +279,7 @@ function renderTasks() {
     div.style.background = t.color;
 
     if (t.done) div.classList.add("completed");
-
+    const timeLabel = formatTimeRange(t.startTime, t.endTime);
     div.innerHTML = `
       <label>
         <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${i})">
@@ -537,7 +559,31 @@ function loadTheme() {
     document.body.classList.add("dark");
   }
 }
+function toggleAllDay() {
+  const isAllDay = document.getElementById("allDayCheck").checked;
+  document.getElementById("startTime").disabled = isAllDay;
+  document.getElementById("endTime").disabled   = isAllDay;
+}
 
+function formatTimeRange(startIso, endIso) {
+  const start = new Date(startIso);
+  const end   = new Date(endIso);
+  const startIsMidnight = start.getHours() === 0 && start.getMinutes() === 0;
+  const endIsLateNight  = end.getHours() === 23 && end.getMinutes() >= 59;
+  const sameDay         = start.toDateString() === end.toDateString();
+
+  if (startIsMidnight && endIsLateNight && sameDay) {
+    return "All day";
+  }
+
+  return `${formatClockTime(start)} – ${formatClockTime(end)}`;
+}
+
+function formatClockTime(d) {
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${hh}:${mm}`;
+}
 /* ---------- INIT ---------- */
 
 async function init() {
